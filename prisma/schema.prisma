@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleType {
+  ADMIN
+  USER
+  OWNER
+  MEMBER
+}
+
+model Role {
+  id String @id @default(uuid()) @db.Char(36)
+
+  role  RoleType
+  users User[]
+
+  @@map("roles")
+}
+
+model User {
+  id       String @id @default(uuid()) @db.Char(36)
+  name     String
+  email    String
+  password String
+  photo    String
+
+  role_id String
+  role    Role   @relation(fields: [role_id], references: [id])
+  
+  rooms   Room[] @relation("UserCreateRelation")
+
+  @@map("users")
+}
+
+enum GroupType {
+  FREE
+  PAID
+}
+
+model Group {
+  id String @id @default(uuid()) @db.Char(36)
+
+  name    String
+  photo   String
+  type    GroupType
+  about   String    @db.Text
+  benefit String[]
+
+  price  Int
+  assets GroupAsset[]
+
+  created_at DateTime @default(now())
+
+  @@map("groups")
+}
+
+model GroupAsset {
+  id String @id @default(uuid()) @db.Char(36)
+
+  group_id String
+  group    Group  @relation(fields: [group_id], references: [id])
+
+  filename String
+
+  @@map("group_assets")
+}
+
+model Room {
+  id String @id @default(uuid()) @db.Char(36)
+
+  name     String?
+  is_group Boolean @default(false)
+
+  created_by      String
+  created_by_user User  @relation("UserCreateRelation", fields: [created_by], references: [id])
+  
+  created_at DateTime @default(now())
+
+  @@map("rooms")
+}
+
+model RoomMember {
+  id String @id @default(uuid()) @db.Char(36)
+
+
+}
