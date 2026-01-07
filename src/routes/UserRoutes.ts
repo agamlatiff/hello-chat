@@ -18,5 +18,9 @@ const uploadPhoto = multer({
 
 userRoutes.post('/auth/sign-up', uploadPhoto.single("photo"), userController.signUp)
 
+userRoutes.post(
+  "/auth/sign-in",
+  userController.signIn
+)
 
 export default userRoutes
