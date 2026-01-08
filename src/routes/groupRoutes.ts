@@ -1,6 +1,6 @@
 import exporess from "express"
 import multer from "multer";
-import { storageGroupPhoto } from "../utils/multer";
+import { storageGroupPaidPhoto, storageGroupPhoto } from "../utils/multer";
 import verifyToken from "../middlewares/verifyToken";
 import * as groupController from "../controllers/groupController"
 
@@ -17,11 +17,35 @@ const uploadPhoto = multer({
   }
 })
 
+const uploadPhotoPaid = multer({
+  storage: storageGroupPaidPhoto,
+  // fileFilter: (req, file, callback) => {
+
+  //   if (file.fieldname === "assets") {
+  //     callback(null, true)
+  //     return
+  //   }
+
+  //   if (file.mimetype.startsWith("image/")) {
+  //     callback(null, false)
+  //   }
+
+  //   callback(null, true)
+  // }
+})
+
 groupRoutes.post(
   "/groups/free",
   verifyToken,
   uploadPhoto.single("photo"),
   groupController.createFreeGroup
+)
+
+groupRoutes.post(
+  "/groups/paid",
+  verifyToken,
+  uploadPhotoPaid.fields([{ name: "photo", maxCount: 1 }, { name: "assets" }]),
+  groupController.createPaidGroup
 )
 
 export default groupRoutes

@@ -7,12 +7,8 @@ import * as userRepositories from "../repositories/userRepositories"
 export default async function verifyToken(req: CustomRequest, res: Response, next: NextFunction) {
   const authorization = req.headers.authorization;
 
-  console.log("Authorization header:", authorization);
-  console.log("First part:", authorization?.split(" ")[0]);
-
   if (authorization?.split(" ")[0] === "JWT") {
     const token = authorization.split(" ")[1];
-    console.log("Token:", token);
 
     jwt.verify(token, process.env.SECRET_AUTH ?? "", async (err, decoded) => {
       if (err) {
