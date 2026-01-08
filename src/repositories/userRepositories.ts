@@ -6,7 +6,7 @@ import crypto from "node:crypto"
 export const isEmailExist = async (email: string) => {
   return await prisma.user.count({
     where: {
-      email: email
+      email
     }
   })
 }
@@ -14,7 +14,7 @@ export const isEmailExist = async (email: string) => {
 export const findRole = async (role: RoleType) => {
   return await prisma.role.findFirstOrThrow({
     where: {
-      role: role
+      role
     }
   })
 }
@@ -35,7 +35,7 @@ export const createUser = async (data: signUpValues, photo: string) => {
 export const findUserByEmail = async (email: string) => {
   return await prisma.user.findFirstOrThrow({
     where: {
-      email: email
+      email
     }
   })
 }
@@ -43,11 +43,47 @@ export const findUserByEmail = async (email: string) => {
 export const createPasswordReset = async (email: string) => {
   const user = await findUserByEmail(email);
   const token = crypto.randomBytes(32).toString("hex");
-  
+
   return await prisma.passwordReset.create({
     data: {
       user_id: user.id,
       token,
     }
   })
+}
+
+
+export const findResetDataByToken = async (token: string) => {
+  return await prisma.passwordReset.findFirst({
+    where: {
+      token
+    },
+    include: {
+      user: {
+        select: {
+          email: true
+        }
+      }
+    }
+  })
+}
+
+export const updatePassword = async (email: string, password: string) => {
+  const user = await findUserByEmail(email)
+
+  return await prisma.user.update({
+    where: {
+      id: user.id,
+    }, data: {
+      password
+    }
+  })
 } 
+
+export const deleteTokenResetById = async (id: string) => {
+  return await prisma.passwordReset.delete({
+    where: {
+      id
+    }
+  })
+}

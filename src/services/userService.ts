@@ -1,4 +1,4 @@
-import type { signInValues, signUpValues } from "../utils/schema/user";
+import type { resetPasswordSchema, signInValues, signUpValues } from "../utils/schema/user";
 import * as userRepositories from "../repositories/userRepositories"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
@@ -68,6 +68,20 @@ export const getEmailReset = async (email: string) => {
     subject: "Reset Password",
     text: `Berikut Link Reset Password ${data.token}`
   })
+
+  return true
+}
+
+export const updatePassword = async (data: resetPasswordSchema, token: string) => {
+  const tokenData = await userRepositories.findResetDataByToken(token)
+
+  if (!tokenData) {
+    throw new Error("Invalid token reset")
+  }
+
+  await userRepositories.updatePassword(tokenData.user.email, bcrypt.hashSync(data.password, 12))
+
+  await userRepositories.deleteTokenResetById(tokenData.id)
 
   return true
 }
