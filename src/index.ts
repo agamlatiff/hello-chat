@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import userRoutes from "./routes/UserRoutes";
 import errorHandler from "./middlewares/errorHandler";
+import groupRoutes from "./routes/groupRoutes";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api", userRoutes);
+app.use("/api", groupRoutes);
 
 app.use(errorHandler);
 
