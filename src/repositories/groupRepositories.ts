@@ -3,7 +3,7 @@ import type { GroupFreeValues } from "../utils/schema/group";
 import * as userRepositories from "./userRepositories"
 
 
-export const createGroup = async (data: GroupFreeValues, photo: string, userId: string) => {
+export const createFreeGroup = async (data: GroupFreeValues, photo: string, userId: string) => {
   const owner = await userRepositories.findRole("OWNER");
 
   return await prisma.group.create({

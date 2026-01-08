@@ -3,6 +3,16 @@ import prisma from "../utils/prisma"
 import type { signUpValues } from "../utils/schema/user"
 import crypto from "node:crypto"
 
+export const getUserById = async (id: string) => {
+  return await prisma.user.findFirstOrThrow({
+    where: {
+      id
+    }, include: {
+      role: true
+    },
+  })
+}
+
 export const isEmailExist = async (email: string) => {
   return await prisma.user.count({
     where: {
@@ -78,7 +88,7 @@ export const updatePassword = async (email: string, password: string) => {
       password
     }
   })
-} 
+}
 
 export const deleteTokenResetById = async (id: string) => {
   return await prisma.passwordReset.delete({
