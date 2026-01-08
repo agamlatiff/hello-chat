@@ -56,18 +56,18 @@ export const signIn = async (data: signInValues) => {
   }
 }
 
-export const getEmailReset = async (email:string) => {
+export const getEmailReset = async (email: string) => {
   const data = await userRepositories.createPasswordReset(email);
-  
+
   await mailtrap.send({
     from: {
       email: "hellochat@test.com",
       name: "Hello Chat"
     },
-    to: [{email: email}],
-    subject:"Reset Password",
+    to: [{ email: email }],
+    subject: "Reset Password",
     text: `Berikut Link Reset Password ${data.token}`
   })
-  
+
   return true
 }

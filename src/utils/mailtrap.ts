@@ -5,6 +5,7 @@ const INBOX_ID = process.env.MAILTRAP_INBOX_ID ?? "";
 
 const mailtrap = new MailtrapClient({
   token: TOKEN,
+  sandbox: true,
   testInboxId: Number.parseInt(INBOX_ID),
 })
 

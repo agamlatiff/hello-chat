@@ -23,4 +23,9 @@ userRoutes.post(
   userController.signIn
 )
 
+userRoutes.post(
+  "/auth/reset-password",
+  userController.getEmailReset
+)
+
 export default userRoutes
