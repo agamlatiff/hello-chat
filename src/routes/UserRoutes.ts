@@ -28,4 +28,10 @@ userRoutes.post(
   userController.getEmailReset
 )
 
+
+userRoutes.put(
+  "/auth/reset-password/:tokenId",
+  userController.updatePassword
+)
+
 export default userRoutes

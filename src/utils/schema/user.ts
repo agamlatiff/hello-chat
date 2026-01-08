@@ -21,4 +21,4 @@ export const resetPasswordSchema = z.object({
 
 export type signInValues = z.infer<typeof signInSchema>
 export type signUpValues = z.infer<typeof signUpSchema>
-export type resetPasswordSchema = z.infer<typeof signUpSchema>
+export type resetPasswordSchema = z.infer<typeof resetPasswordSchema>
