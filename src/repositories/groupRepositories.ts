@@ -2,13 +2,23 @@ import prisma from "../utils/prisma";
 import type { GroupFreeValues, GroupPaidValues } from "../utils/schema/group";
 import * as userRepositories from "./userRepositories"
 
+export const findGroupById = async (id: string) => {
+  return await prisma.group.findFirstOrThrow({
+    where: {
+      id
+    }
+  })
+}
 
-export const createFreeGroup = async (data: GroupFreeValues, photo: string, userId: string) => {
+export const upsertFreeGroup = async (data: GroupFreeValues, userId: string, photo?: string, groupId?: string) => {
   const owner = await userRepositories.findRole("OWNER");
 
-  return await prisma.group.create({
-    data: {
-      photo: photo,
+  return await prisma.group.upsert({
+    where: {
+      id: groupId
+    },
+    create: {
+      photo: photo ?? "",
       name: data.name,
       about: data.about,
       price: 0,
@@ -26,7 +36,13 @@ export const createFreeGroup = async (data: GroupFreeValues, photo: string, user
           is_group: true,
 
         }
-      }
+      },
+
+    },
+    update: {
+      photo: photo,
+      name: data.name,
+      about: data.about,
     }
   })
 }
