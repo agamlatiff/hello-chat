@@ -5,7 +5,9 @@ import * as groupService from "../services/groupService"
 
 export const getDiscoverGroups = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await groupService.getDiscover();
+    const {name} = req.query
+    
+    const data = await groupService.getDiscover(name as string ?? "");
 
     return res.json({
       success: true,

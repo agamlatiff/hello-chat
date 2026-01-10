@@ -10,8 +10,14 @@ export const findGroupById = async (id: string) => {
   })
 }
 
-export const getDiscoverGroup = async () => {
+export const getDiscoverGroup = async (name = "") => {
   return await prisma.group.findMany({
+    where: {
+      name: {
+        contains: name,
+        mode: "insensitive"
+      }
+    },
     select: {
       photo_url: true,
       id: true,
@@ -21,7 +27,7 @@ export const getDiscoverGroup = async () => {
       room: {
         select: {
           _count: {
-            select :{
+            select: {
               members: true
             }
           }

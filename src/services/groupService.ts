@@ -3,8 +3,8 @@ import * as groupRepositories from "../repositories/groupRepositories"
 import fs from "node:fs"
 import path from "node:path"
 
-export const getDiscover  = async () => {
-  return await groupRepositories.getDiscoverGroup();
+export const getDiscover  = async (name?: string) => {
+  return await groupRepositories.getDiscoverGroup(name);
 }
 
 
