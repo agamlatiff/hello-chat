@@ -109,7 +109,7 @@ export const createPaidGroup = async (req: CustomRequest, res: Response, next: N
 
     const assets = file.assets.map((asset) => asset.filename)
 
-    const group = await groupService.upsertPaidGroup(parse.data, file.photo[0].filename, req.user?.id ?? "", assets);
+    const group = await groupService.upsertPaidGroup(parse.data, req.user?.id ?? "", file.photo[0].filename, assets);
 
     return res.json({
       success: true,

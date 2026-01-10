@@ -22,7 +22,7 @@ export const upsertFreeGroup = async (data: GroupFreeValues, userId: string, pho
 
 }
 
-export const upsertPaidGroup = async (data: GroupPaidValues, photo: string, userId: string, assets?: string[], groupId?: string) => {
+export const upsertPaidGroup = async (data: GroupPaidValues, userId: string, photo?: string, assets?: string[], groupId?: string) => {
 
   if (groupId && photo) {
     const group = await groupRepositories.findGroupById(groupId)
