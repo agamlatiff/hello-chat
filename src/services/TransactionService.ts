@@ -41,6 +41,7 @@ export const createTransaction = async (groupId: string, userId: string) => {
   const midtransAuth = process.env.MIDTRANS_AUTH_STRING ?? ""
 
   const midtransResponse = await fetch(midtransUrl, {
+    method: "POST",
     body: JSON.stringify({
       "transaction_details": {
         "order_id": transaction.id,
@@ -59,8 +60,8 @@ export const createTransaction = async (groupId: string, userId: string) => {
       Authorization: `Basic ${midtransAuth}`,
     },
   })
-  
+
   const midtransJson = await midtransResponse.json()
-  
+
   return midtransJson
 }
