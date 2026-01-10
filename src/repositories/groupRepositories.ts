@@ -205,7 +205,7 @@ export const getMyOwnGroups = async (userId: string) => {
       photo_url: true,
       name: true,
       type: true,
-      room:  {
+      room: {
         select: {
           _count: {
             select: {
@@ -225,6 +225,26 @@ export const getTotalMembers = async (roomIds: string[]) => {
       room_id: {
         in: roomIds
       }
+    }
+  })
+}
+
+export const getMemberById = async (userId: string) => {
+  return await prisma.roomMember.findFirst({
+    where: {
+      user_id: userId,
+    }
+  })
+}
+
+export const addMemberToGroup = async (roomId: string, userId: string) => {
+  const role = await userRepositories.findRole("USER");
+
+  return await prisma.roomMember.create({
+    data: {
+      room_id: roomId,
+      user_id: userId,
+      role_id: role.id,
     }
   })
 }

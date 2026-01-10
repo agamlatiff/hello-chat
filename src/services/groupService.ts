@@ -81,3 +81,18 @@ export const getMyOwnGroups = async (userId: string) => {
   }
 
 }
+
+
+export const addMemberFreeGroup = async (groupId: string, userId: string) => {
+  const checkMember = await groupRepositories.getMemberById(userId)
+  
+  if(!checkMember) {
+    throw new Error("You already in joined group")
+  }
+  
+  const group = await groupRepositories.findGroupById(groupId)
+  
+  await groupRepositories.addMemberToGroup(group.room_id, userId)
+  
+  return true
+}
