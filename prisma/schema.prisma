@@ -70,9 +70,9 @@ model Group {
 
   price  Int
   assets GroupAsset[]
-  
-  room_id String @unique
-  room Room @relation(fields: [room_id], references: [id])
+
+  room_id      String        @unique
+  room         Room          @relation(fields: [room_id], references: [id])
   transactions Transaction[]
 
   created_at DateTime @default(now())
@@ -84,7 +84,7 @@ model GroupAsset {
   id String @id @default(uuid()) @db.Char(36)
 
   group_id String
-  group    Group  @relation(fields: [group_id], references: [id])
+  group    Group  @relation(fields: [group_id], references: [id], onDelete: Cascade)
 
   filename String
 
@@ -102,7 +102,7 @@ model Room {
 
   members  RoomMember[]
   messages RoomMessage[]
-  group Group?
+  group    Group?
 
   created_at DateTime @default(now())
 

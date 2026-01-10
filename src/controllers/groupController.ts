@@ -3,6 +3,20 @@ import type { CustomRequest } from "../types/CustomRequest";
 import { groupFreeSchema, groupPaidSchema } from "../utils/schema/group";
 import * as groupService from "../services/groupService"
 
+export const getDiscoverGroups = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await groupService.getDiscover();
+
+    return res.json({
+      success: true,
+      message: "Get discover groups success",
+      data
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const createFreeGroup = async (
   req: CustomRequest,
   res: Response,
