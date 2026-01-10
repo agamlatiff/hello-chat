@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 import type { CustomRequest } from "../types/CustomRequest";
-import { groupFreeSchema, groupPaidSchema } from "../utils/schema/group";
+import { groupFreeSchema, groupPaidSchema, joinFreeGroup } from "../utils/schema/group";
 import * as groupService from "../services/groupService"
 
 export const getDiscoverGroups = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const {name} = req.query
-    
+    const { name } = req.query
+
     const data = await groupService.getDiscover(name as string ?? "");
 
     return res.json({
@@ -36,17 +36,17 @@ export const getOwnGroups = async (req: CustomRequest, res: Response, next: Next
 
 export const getDiscoverPeople = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const {name} = req.query;
-    
+    const { name } = req.query;
+
     const data = await groupService.getDiscoverPeople(name as string ?? "", req?.user?.id)
-    
+
     return res.json({
       success: true,
       message: "Get discover groups success",
       data
     })
-    
-    
+
+
   } catch (error) {
     next(error)
   }
@@ -55,17 +55,17 @@ export const getDiscoverPeople = async (req: CustomRequest, res: Response, next:
 
 export const findDetailGroup = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const {id} = req.params;
-    
+    const { id } = req.params;
+
     const data = await groupService.findDetailGroup(id, req?.user?.id ?? "")
-    
+
     return res.json({
       success: true,
       message: "Get discover groups success",
       data
     })
-    
-    
+
+
   } catch (error) {
     next(error)
   }
@@ -221,6 +221,33 @@ export const updatePaidGroup = async (req: CustomRequest, res: Response, next: N
       data: group
     })
 
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+export const createMemberFreeGroup = async (req: CustomRequest, res: Response, next: NextFunction) => {
+  try {
+    const parse = joinFreeGroup.safeParse(req.body);
+
+    if (!parse.success) {
+      const errorMessage = parse.error.issues.map((err) => `${err.path} - ${err.message}`)
+
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error",
+        detail: errorMessage
+      })
+    }
+
+    const data = await groupService.addMemberFreeGroup(parse.data.group_id, req?.user?.id ?? "")
+
+    return res.json({
+      success: true,
+      message: "Succes join group",
+      data
+    })
   } catch (error) {
     next(error)
   }
