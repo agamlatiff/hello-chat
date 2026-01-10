@@ -52,14 +52,14 @@ export const upsertPaidGroup = async (data: GroupPaidValues, userId: string, pho
   return group
 }
 
-export const getMyOwnGroup = async (userId: string) => {
-  const groups = await groupRepositories.getMyOwnGroup(userId)
+export const getMyOwnGroups = async (userId: string) => {
+  const groups = await groupRepositories.getMyOwnGroups(userId)
 
-  const paidGroups = groups.map((item) => {
+  const paidGroups = groups.filter((item) => {
     return item.type === "PAID"
   }).length;
 
-  const freeGroups = groups.map((item) => {
+  const freeGroups = groups.filter((item) => {
     return item.type === "FREE"
   }).length;
   

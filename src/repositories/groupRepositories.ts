@@ -193,7 +193,7 @@ export const findDetailGroup = async (id: string, userId: string) => {
   })
 }
 
-export const getMyOwnGroup = async (userId: string) => {
+export const getMyOwnGroups = async (userId: string) => {
   return await prisma.group.findMany({
     where: {
       room: {

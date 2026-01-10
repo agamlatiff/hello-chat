@@ -19,6 +19,20 @@ export const getDiscoverGroups = async (req: CustomRequest, res: Response, next:
   }
 }
 
+export const getOwnGroups = async (req: CustomRequest, res: Response, next: NextFunction) => {
+  try {
+    const data = await groupService.getMyOwnGroups(req?.user?.id ?? "");
+
+    return res.json({
+      success: true,
+      message: "Get my own groups success",
+      data
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 export const getDiscoverPeople = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
