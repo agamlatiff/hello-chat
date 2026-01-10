@@ -48,7 +48,7 @@ export const getDiscoverPeople = async (name = "", userId?: string) => {
         contains: name,
         mode: "insensitive"
       }
-    }, 
+    },
     select: {
       id: true,
       name: true,
@@ -145,4 +145,50 @@ export const upsertPaidGroup = async (data: GroupPaidValues, userId: string, pho
   }
 
   return group
+}
+
+export const findDetailGroup = async (id: string, userId: string) => {
+  return await prisma.group.findUniqueOrThrow({
+    where: {
+      id,
+      room: {
+        created_by: userId
+      }
+    },
+    select: {
+      id: true,
+      name: true,
+      photo_url: true,
+      about: true,
+      type: true,
+      assets: {
+        select: {
+          filename: true,
+        }
+      },
+      room: {
+        select: {
+          members: {
+            take: 1,
+            where: {
+              user_id: userId
+            },
+            select: {
+              user: {
+                select: {
+                  name: true,
+                  photo_url: true,
+                }
+              }
+            }
+          },
+          _count: {
+            select: {
+              members: true
+            }
+          }
+        }
+      }
+    }
+  })
 }
