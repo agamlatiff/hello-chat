@@ -37,6 +37,26 @@ export const getDiscoverGroup = async (name = "") => {
   })
 }
 
+
+export const getDiscoverPeople = async (name = "", userId?: string) => {
+  return await prisma.user.findMany({
+    where: {
+      id: {
+        not: userId
+      },
+      name: {
+        contains: name,
+        mode: "insensitive"
+      }
+    }, 
+    select: {
+      id: true,
+      name: true,
+      photo_url: true,
+    }
+  })
+}
+
 export const upsertFreeGroup = async (data: GroupFreeValues, userId: string, photo?: string, groupId?: string) => {
   const owner = await userRepositories.findRole("OWNER");
 

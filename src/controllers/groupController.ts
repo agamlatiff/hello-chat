@@ -3,7 +3,7 @@ import type { CustomRequest } from "../types/CustomRequest";
 import { groupFreeSchema, groupPaidSchema } from "../utils/schema/group";
 import * as groupService from "../services/groupService"
 
-export const getDiscoverGroups = async (req: Request, res: Response, next: NextFunction) => {
+export const getDiscoverGroups = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     const {name} = req.query
     
@@ -18,6 +18,26 @@ export const getDiscoverGroups = async (req: Request, res: Response, next: NextF
     next(error)
   }
 }
+
+
+export const getDiscoverPeople = async (req: CustomRequest, res: Response, next: NextFunction) => {
+  try {
+    const {name} = req.query;
+    
+    const data = await groupService.getDiscoverPeople(name as string ?? "", req?.user?.id)
+    
+    return res.json({
+      success: true,
+      message: "Get discover groups success",
+      data
+    })
+    
+    
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 export const createFreeGroup = async (
   req: CustomRequest,
