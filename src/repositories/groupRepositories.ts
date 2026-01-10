@@ -6,6 +6,21 @@ export const findGroupById = async (id: string) => {
   return await prisma.group.findFirstOrThrow({
     where: {
       id
+    }, include: {
+      room: {
+        select: {
+          members: {
+            include: {
+              role: true
+            },
+            where: {
+              role: {
+                role: "OWNER"
+              }
+            }
+          }
+        }
+      }
     }
   })
 }
@@ -233,7 +248,7 @@ export const getMemberById = async (userId: string, groupId: string) => {
   return await prisma.roomMember.findFirst({
     where: {
       user_id: userId,
-      room : {
+      room: {
         group: {
           id: groupId
         }
