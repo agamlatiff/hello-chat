@@ -16,7 +16,7 @@ export const upsertFreeGroup = async (data: GroupFreeValues, userId: string, pho
 
   }
 
-  const group = await groupRepositories.upsertFreeGroup(data, userId, photo);
+  const group = await groupRepositories.upsertFreeGroup(data, userId, photo, groupId);
 
   return group
 
