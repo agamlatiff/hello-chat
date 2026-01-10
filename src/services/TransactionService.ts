@@ -1,5 +1,6 @@
 import * as groupRepositories from "../repositories/groupRepositories"
 import * as transactionRepositories from "../repositories/transactionRepositories"
+import * as userRepositories from "../repositories/userRepositories"
 
 export const createTransaction = async (groupId: string, userId: string) => {
   const checkMember = await groupRepositories.getMemberById(userId, groupId)
@@ -33,4 +34,33 @@ export const createTransaction = async (groupId: string, userId: string) => {
       }
     }
   })
+
+  const user = await userRepositories.getUserById(userId)
+
+  const midtransUrl = process.env.MIDTRANS_TRANSACTION_URL ?? ""
+  const midtransAuth = process.env.MIDTRANS_AUTH_STRING ?? ""
+
+  const midtransResponse = await fetch(midtransUrl, {
+    body: JSON.stringify({
+      "transaction_details": {
+        "order_id": transaction.id,
+        "gross_amount": transaction.price
+      },
+      "credit_card": {
+        "secure": true
+      },
+      "customer_details": {
+        "email": user.email,
+      },
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Basic ${midtransAuth}`,
+    },
+  })
+  
+  const midtransJson = await midtransResponse.json()
+  
+  return midtransJson
 }
