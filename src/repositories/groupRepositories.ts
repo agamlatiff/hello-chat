@@ -229,10 +229,15 @@ export const getTotalMembers = async (roomIds: string[]) => {
   })
 }
 
-export const getMemberById = async (userId: string) => {
+export const getMemberById = async (userId: string, groupId: string) => {
   return await prisma.roomMember.findFirst({
     where: {
       user_id: userId,
+      room : {
+        group: {
+          id: groupId
+        }
+      }
     }
   })
 }
