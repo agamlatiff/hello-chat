@@ -4,6 +4,12 @@ import * as chatController from "../controllers/chatController"
 
 const chatRoutes = express.Router()
 
+chatRoutes.get(
+  "/chat/rooms",
+  verifyToken,
+  chatController.getRecentRooms
+)
+
 chatRoutes.post(
   "/chat/rooms",
   verifyToken,
