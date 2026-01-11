@@ -76,14 +76,18 @@ export const updateTransaction = async (order_id: string, status: string) => {
 
       await groupRepositories.addMemberToGroup(group.room_id, transaction.user_id)
 
-      return transaction.id
+      return {
+        transaction_id: transaction.id
+      }
     }
     case "deny":
     case "expire":
     case "failure": {
       const transaction = await transactionRepositories.updateTransaction(order_id, "FAILED")
 
-      return transaction.id
+      return {
+        transaction_id: transaction.id
+      }
     }
     default: {}
   }

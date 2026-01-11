@@ -10,4 +10,9 @@ transactionRoutes.post(
   transactionController.createTransaction
 )
 
+transactionRoutes.post(
+  "/transactions/handle-payment", 
+  transactionController.updateTransaction
+)
+
 export default transactionRoutes
