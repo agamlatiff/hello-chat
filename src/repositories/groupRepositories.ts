@@ -268,3 +268,20 @@ export const addMemberToGroup = async (roomId: string, userId: string) => {
     }
   })
 }
+
+export const findAssetGroup = async (assetId: string) => {
+  return await prisma.groupAsset.findFirstOrThrow({
+    where: {
+      id: assetId
+    }
+  })
+}
+
+export const deleteAssetGroup = async (assetId: string) => {
+  return await prisma.groupAsset.delete({
+    where:{
+      id: assetId
+    }
+  })
+}
+

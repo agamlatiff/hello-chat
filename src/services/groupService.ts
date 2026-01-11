@@ -3,7 +3,7 @@ import * as groupRepositories from "../repositories/groupRepositories"
 import fs from "node:fs"
 import path from "node:path"
 
-export const getDiscover  = async (name?: string) => {
+export const getDiscover = async (name?: string) => {
   return await groupRepositories.getDiscoverGroup(name);
 }
 
@@ -62,9 +62,9 @@ export const getMyOwnGroups = async (userId: string) => {
   const freeGroups = groups.filter((item) => {
     return item.type === "FREE"
   }).length;
-  
+
   const totalMembers = await groupRepositories.getTotalMembers(groups.map((item) => item.room.id))
-  
+
   return {
     lists: groups.map((item) => {
       return {
@@ -85,18 +85,30 @@ export const getMyOwnGroups = async (userId: string) => {
 
 export const addMemberFreeGroup = async (groupId: string, userId: string) => {
   const checkMember = await groupRepositories.getMemberById(userId, groupId)
-  
-  if(checkMember) {
+
+  if (checkMember) {
     throw new Error("You already in joined group")
   }
-  
+
   const group = await groupRepositories.findGroupById(groupId)
-  
-  if(group.type === "PAID") {
+
+  if (group.type === "PAID") {
     throw new Error("This group is paid")
   }
-  
+
   await groupRepositories.addMemberToGroup(group.room_id, userId)
-  
+
   return true
+}
+
+export const deleteGroupAsset = async (assetId: string) => {
+
+  const asset = await groupRepositories.findAssetGroup(assetId)
+  const pathURL = path.join(__dirname, "../../public/assets/uploads/group_assets/", asset.filename)
+
+  if (fs.existsSync(pathURL)) {
+    fs.unlinkSync(pathURL)
+  }
+
+    return await groupRepositories.deleteAssetGroup(assetId)
 }
