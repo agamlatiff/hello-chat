@@ -6,16 +6,12 @@ export const createRoomPersonal = async (sender_id: string, receiver_id: string)
     where: {
       members: {
         every: {
-          AND: [
-            {
-              user_id: sender_id
-            },
-            {
-              user_id: receiver_id
-            }
-          ]
+          user_id: {
+            in: [sender_id, receiver_id]
+          }
         }
-      }
+      },
+      is_group: false
     }
   })
 
