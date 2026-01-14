@@ -7,3 +7,7 @@ export const createRoomPersonal = async (sender_id: string, receiver_id: string)
 export const getRecentRooms = async (userId: string) => {
   return await chatRepositories.getRooms(userId)
 }
+
+export const getRoomMessages = async (roomId: string) => {
+  return await chatRepositories.getRoomMessages(roomId)
+}

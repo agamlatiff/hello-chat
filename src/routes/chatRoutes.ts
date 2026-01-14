@@ -10,6 +10,12 @@ chatRoutes.get(
   chatController.getRecentRooms
 )
 
+chatRoutes.get(
+  "/chat/rooms/:roomId",
+  verifyToken,
+  chatController.getRoomMessages
+)
+
 chatRoutes.post(
   "/chat/rooms",
   verifyToken,

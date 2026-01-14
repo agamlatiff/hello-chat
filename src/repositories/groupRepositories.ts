@@ -77,7 +77,7 @@ export const upsertFreeGroup = async (data: GroupFreeValues, userId: string, pho
 
   return await prisma.group.upsert({
     where: {
-      id: groupId
+      id: groupId ?? ""
     },
     create: {
       photo: photo ?? "",
