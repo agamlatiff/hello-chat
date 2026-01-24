@@ -60,6 +60,8 @@ export const getRooms = async (userId: string) => {
     include: {
       messages: {
         select: {
+          type:true,
+          content_url: true,
           content: true,
           user: {
             select: {
@@ -109,8 +111,9 @@ export const getRoomMessages = async (roomId: string, ) => {
     select: {
       id: true,
       is_group: true,
-      messages: {
+      messages: { 
         select: {
+          content_url: true,
           content: true,
           type: true,
           user: { 
