@@ -21,4 +21,10 @@ transactionRoutes.get(
   transactionController.getRevenueStat
 )
 
+transactionRoutes.get(
+  "/payouts",
+  verifyToken,
+  transactionController.getHistoryPayouts
+)
+
 export default transactionRoutes

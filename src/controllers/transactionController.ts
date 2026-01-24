@@ -64,3 +64,22 @@ export const getRevenueStat = async (
     next(error)
   }
 }
+
+
+export const getHistoryPayouts = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = await transactionService.getHistoryPayouts(req.user?.id ?? "")
+
+    return res.json({
+      success: true,
+      message: "Success get history payouts",
+      data
+    })
+  } catch (error) {
+    next(error)
+  }
+}

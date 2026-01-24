@@ -131,3 +131,8 @@ export const getRevenueStat = async (user_id: string) => {
   }
 
 }
+
+
+export const getHistoryPayouts = async (user_id: string) => {
+  return await transactionRepositories.getMyPayouts(user_id)
+}
