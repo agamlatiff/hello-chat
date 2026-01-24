@@ -89,39 +89,57 @@ export const updateTransaction = async (order_id: string, status: string) => {
         transaction_id: transaction.id
       }
     }
-    default: {}
+    default: { }
   }
 }
+
+export const getBalance = async (user_id: string) => {
+  const transactions = await transactionRepositories.getMyTransaction(user_id)
+  const payouts = await transactionRepositories.getMyPayouts(user_id)
+
+  const totalRevenue = transactions.reduce((acc, curr) => {
+    if (curr.type === "SUCCESS") {
+      return acc + curr.price
+    }
+
+    return acc
+  }, 0)
+
+  const totalPayout = payouts.reduce((acc, curr) => acc + curr.amount, 0)
+  
+  return totalRevenue - totalPayout
+}
+
 
 export const getRevenueStat = async (user_id: string) => {
   const transactions = await transactionRepositories.getMyTransaction(user_id)
   const payouts = await transactionRepositories.getMyPayouts(user_id)
   const groups = await groupRepositories.getMyOwnGroups(user_id)
-  
+
   const totalRevenue = transactions.reduce((acc, curr) => {
-    if(curr.type === "SUCCESS") {
-       return acc + curr.price
+    if (curr.type === "SUCCESS") {
+      return acc + curr.price
     }
-    
-    return acc
-  }, 0)
-  
-  const totalPayout = payouts.reduce((acc, curr) => acc + curr.amount, 0)
-  
-  const balance = totalRevenue - totalPayout;
-  
-  const totalVipGroups = groups.filter((group) => group.type === "PAID").length;
-  const totalVipMembers = groups.reduce((acc, curr) => {
-    if(curr.type === "PAID") {
-      return acc + (curr?.room?._count?.members ?? 0)
-    }
-    
+
     return acc
   }, 0)
 
-  
-  const latestMemberVip = transactions.filter((transaction) => transaction.type === "FAILED" )
-  
+  const totalPayout = payouts.reduce((acc, curr) => acc + curr.amount, 0)
+
+  const balance = totalRevenue - totalPayout;
+
+  const totalVipGroups = groups.filter((group) => group.type === "PAID").length;
+  const totalVipMembers = groups.reduce((acc, curr) => {
+    if (curr.type === "PAID") {
+      return acc + (curr?.room?._count?.members ?? 0)
+    }
+
+    return acc
+  }, 0)
+
+
+  const latestMemberVip = transactions.filter((transaction) => transaction.type === "FAILED")
+
   return {
     balance,
     total_vip_groups: totalVipGroups,
@@ -131,7 +149,6 @@ export const getRevenueStat = async (user_id: string) => {
   }
 
 }
-
 
 export const getHistoryPayouts = async (user_id: string) => {
   return await transactionRepositories.getMyPayouts(user_id)
