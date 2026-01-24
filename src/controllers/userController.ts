@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { ResetPasswordValues, signInSchema, signUpSchema } from "../utils/schema/user";
+import { resetPasswordSchema, ResetPasswordValues, signInSchema, signUpSchema } from "../utils/schema/user";
 import fs from "node:fs";
 import * as userService from "../services/userService";
 
@@ -104,7 +104,7 @@ export const updatePassword = async (
   next: NextFunction,
 ) => {
   try {
-    const parse = ResetPasswordValues.safeParse(req.body)
+    const parse = resetPasswordSchema.safeParse(req.body)
 
     if (!parse.success) {
       const errorMessage = parse.error.issues.map((err) => `${err.path} - ${err.message}`);

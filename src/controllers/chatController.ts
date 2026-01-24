@@ -1,6 +1,6 @@
 import type { NextFunction, Response } from "express";
 import type { CustomRequest } from "../types/CustomRequest";
-import { createRoomPersonalSchema } from "../utils/schema/chat";
+import { createMessageSchema, createRoomPersonalSchema } from "../utils/schema/chat";
 import * as chatService from "../services/chatService"
 
 export const createRoomPersonal = async (
@@ -65,6 +65,37 @@ export const getRoomMessages = async (
     return res.json({
       success: true,
       message: "Success get rooms messages",
+      data
+    })
+  }catch (error) {
+    next(error)
+  }
+}
+
+export const createMessage = async (
+  req: CustomRequest, 
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const parse = createMessageSchema.safeParse(req.body)
+
+    if (!parse.success) {
+      
+      const errorMessage = parse.error.issues.map((err) => `${err.path} - ${err.message}`)
+      
+      return res.status(400).json({
+        status: false,
+        message: "Validation Error",
+        detail: errorMessage
+      })
+    }
+
+    const data = await chatService.createMessage(parse.data, req?.user?.id ?? "", req?.file)
+
+    return res.json({
+      success: true,
+      message: "Success create message",
       data
     })
   }catch (error) {

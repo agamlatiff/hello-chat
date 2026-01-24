@@ -1,8 +1,21 @@
 import express from "express"
 import verifyToken from "../middlewares/verifyToken"
 import * as chatController from "../controllers/chatController"
+import multer from "multer"
+import { storagePhotoAttach } from "../utils/multer"
 
 const chatRoutes = express.Router()
+
+const uploadAttach = multer({
+  storage: storagePhotoAttach,
+  fileFilter: (req,file,callback) => {
+    if(file.mimetype.startsWith("image")) {
+      callback(null,true)
+    }else {
+      callback(null,false)
+    }
+  }
+})
 
 chatRoutes.get(
   "/chat/rooms",
@@ -20,6 +33,13 @@ chatRoutes.post(
   "/chat/rooms",
   verifyToken,
   chatController.createRoomPersonal
+)
+
+chatRoutes.post(
+  "/chat/rooms/messages",
+  verifyToken,
+  uploadAttach.single("attach"),
+  chatController.createMessage
 )
 
 export default chatRoutes

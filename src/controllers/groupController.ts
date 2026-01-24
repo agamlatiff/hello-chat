@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import type { CustomRequest } from "../types/CustomRequest";
-import { groupFreeSchema, groupPaidSchema, joinFreeGroup } from "../utils/schema/group";
+import { groupFreeSchema, groupPaidSchema, joinFreeGroupSchema } from "../utils/schema/group";
 import * as groupService from "../services/groupService"
 
 export const getDiscoverGroups = async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -229,10 +229,13 @@ export const updatePaidGroup = async (req: CustomRequest, res: Response, next: N
 
 export const createMemberFreeGroup = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const parse = joinFreeGroup.safeParse(req.body);
+    const parse = joinFreeGroupSchema.safeParse(req.body);
 
     if (!parse.success) {
-      const errorMessage = parse.error.issues.map((err) => `${err.path} - ${err.message}`)
+      const errorMessage = parse.error.issues.map((err) => {
+        const field = err.path.length > 0 ? err.path.join('.') : 'body';
+        return `${field}: ${err.message}`;
+      });
 
       return res.status(400).json({
         success: false,

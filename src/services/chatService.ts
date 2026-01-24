@@ -16,23 +16,23 @@ export const getRoomMessages = async (roomId: string) => {
 }
 
 export const createMessage = async (data: CreateMessageValues, userId: string, file: Express.Multer.File | undefined) => {
-  
+
   const room = await chatRepositories.findRoomById(data.room_id);
-  
-  if(room.is_group) {
+
+  if (room.is_group) {
     const member = await chatRepositories.findMember(userId, room.id)
-    
-    if(!member) {
-      
+
+    if (!member) {
+
       const pathFile = path.join(__dirname, "../../public/assets/uploads/attach_messages/", file?.filename ?? "")
-      
-      if(fs.existsSync(pathFile)) {
+
+      if (fs.existsSync(pathFile)) {
         fs.unlinkSync(pathFile)
       }
-      
+
       throw new Error("You are not a member of this group")
     }
   }
-  
-  await chatRepositories.createMessage(data, userId, file);
+
+  return await chatRepositories.createMessage(data, userId, file);
 }
