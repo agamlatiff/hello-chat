@@ -22,6 +22,20 @@ export const getMyTransaction = async (user_id : string) => {
   return await prisma.transaction.findMany({
     where: {
       owner_id: user_id
+    },
+    include :{ 
+      user: {
+        select: {
+          name: true,
+          photo_url: true,
+        }
+      },
+      group: {
+        select: {
+          name: true,
+          photo_url: true,
+        }
+      }
     }
   })
 }

@@ -110,7 +110,7 @@ export const getRevenueStat = async (user_id: string) => {
   
   const balance = totalRevenue - totalPayout;
   
-  const totalVipGroup = groups.filter((group) => group.type === "PAID").length;
+  const totalVipGroups = groups.filter((group) => group.type === "PAID").length;
   const totalVipMembers = groups.reduce((acc, curr) => {
     if(curr.type === "PAID") {
       return acc + (curr?.room?._count?.members ?? 0)
@@ -119,5 +119,15 @@ export const getRevenueStat = async (user_id: string) => {
     return acc
   }, 0)
 
+  
+  const latestMemberVip = transactions.filter((transaction) => transaction.type === "FAILED" )
+  
+  return {
+    balance,
+    total_vip_groups: totalVipGroups,
+    total_vip_members: totalVipMembers,
+    latest_member: latestMemberVip,
+    total_revenue: totalRevenue
+  }
 
 }
