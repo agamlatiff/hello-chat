@@ -1,6 +1,6 @@
 import type { RoleType } from "@prisma/client"
 import prisma from "../utils/prisma"
-import type { signUpValues } from "../utils/schema/user"
+import type { SignUpValues } from "../utils/schema/user"
 import crypto from "node:crypto"
 
 export const getUserById = async (id: string) => {
@@ -28,7 +28,7 @@ export const findRole = async (role: RoleType) => {
     }
   })
 }
-export const createUser = async (data: signUpValues, photo: string) => {
+export const createUser = async (data: SignUpValues, photo: string) => {
   const role = await findRole("USER")
 
   return await prisma.user.create({

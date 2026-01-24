@@ -4,4 +4,10 @@ export const createRoomPersonalSchema = z.object({
   user_id: z.string(),
 }).strict()
 
-export type CreateRoomPersonalSchema = z.infer<typeof createRoomPersonalSchema>
+export const createMessageSchema = z.object({
+  message: z.string(),
+  room_id: z.string(),
+})
+
+export type CreateMessageValues = z.infer<typeof createMessageSchema>
+export type CreateRoomPersonalValues = z.infer<typeof createRoomPersonalSchema>

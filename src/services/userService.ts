@@ -1,11 +1,11 @@
-import type { resetPasswordSchema, signInValues, signUpValues } from "../utils/schema/user";
+import type { ResetPasswordValues, SignInValues, SignUpValues } from "../utils/schema/user";
 import * as userRepositories from "../repositories/userRepositories"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import mailtrap from "../utils/mailtrap";
 
 
-export const signUp = async (data: signUpValues, file: Express.Multer.File) => {
+export const signUp = async (data: SignUpValues, file: Express.Multer.File) => {
   const isEmailExist = await userRepositories.isEmailExist(data.email)
 
   if (isEmailExist >= 1) {
@@ -30,7 +30,7 @@ export const signUp = async (data: signUpValues, file: Express.Multer.File) => {
   }
 }
 
-export const signIn = async (data: signInValues) => {
+export const signIn = async (data: SignInValues) => {
   const isEmailExist = await userRepositories.isEmailExist(data.email)
 
   if (isEmailExist === 0) {
@@ -72,7 +72,7 @@ export const getEmailReset = async (email: string) => {
   return true
 }
 
-export const updatePassword = async (data: resetPasswordSchema, token: string) => {
+export const updatePassword = async (data: ResetPasswordValues, token: string) => {
   const tokenData = await userRepositories.findResetDataByToken(token)
 
   if (!tokenData) {

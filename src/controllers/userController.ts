@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { resetPasswordSchema, signInSchema, signUpSchema } from "../utils/schema/user";
+import { ResetPasswordValues, signInSchema, signUpSchema } from "../utils/schema/user";
 import fs from "node:fs";
 import * as userService from "../services/userService";
 
@@ -25,9 +25,9 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
         detail: errorMessage
       })
     }
-    
+
     const newUser = await userService.signUp(parse.data, req.file)
-    
+
     return res.json({
       success: true,
       message: "User created successfully",
@@ -56,9 +56,9 @@ export const signIn = async (
         detail: errorMessage
       })
     }
-    
+
     const data = await userService.signIn(parse.data)
-    
+
     return res.json({
       success: true,
       message: "User signed in successfully",
@@ -70,24 +70,24 @@ export const signIn = async (
 }
 
 export const getEmailReset = async (
-  req:Request,
-  res:Response,
-  next:NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
   try {
-    const parse = signInSchema.pick({email: true}).safeParse(req.body)
-    
-    if(!parse.success) {
+    const parse = signInSchema.pick({ email: true }).safeParse(req.body)
+
+    if (!parse.success) {
       const errorMessage = parse.error.issues.map((err) => `${err.path} - ${err.message}`);
-      
+
       return res.status(400).json({
-        success: false, 
+        success: false,
         message: "Validation Error",
         detail: errorMessage,
       })
     }
     await userService.getEmailReset(parse.data.email);
-    
+
     return res.json({
       success: true,
       message: "Email reset sent successfully"
@@ -99,27 +99,27 @@ export const getEmailReset = async (
 }
 
 export const updatePassword = async (
-  req:Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const parse = resetPasswordSchema.safeParse(req.body)
-    
-    if(!parse.success) {
+    const parse = ResetPasswordValues.safeParse(req.body)
+
+    if (!parse.success) {
       const errorMessage = parse.error.issues.map((err) => `${err.path} - ${err.message}`);
-      
+
       return res.status(400).json({
-        success: false, 
+        success: false,
         message: "Validation error",
         detail: errorMessage,
       })
     }
-    
-    const {tokenId} = req.params;
-    
+
+    const { tokenId } = req.params;
+
     await userService.updatePassword(parse.data, tokenId)
-    
+
     return res.json({
       succes: true,
       message: "Password update successfully"
