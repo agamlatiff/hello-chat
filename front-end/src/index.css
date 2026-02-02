@@ -1,1 +1,120 @@
 @import "tailwindcss";
+
+@theme {
+  --color-heyhao-black: #080c1a;
+  --color-heyhao-secondary: #6a7686;
+  --color-heyhao-blue: #165dff;
+  --color-heyhao-orange: #f97316;
+  --color-heyhao-coral: #ed6b60;
+  --color-heyhao-border: #f3f4f3;
+  --color-heyhao-grey: #eff2f7;
+  --color-heyhao-dark-grey: #6a7686;
+  --color-heyhao-green: #30b22d;
+  --color-heyhao-yellow: #fed71f;
+  --color-heyhao-card-grey: #f1f3f6;
+  --color-heyhao-card-message: #c9e6fc;
+  --color-heyhao-purple: #442462;
+}
+
+body {
+  font-family: "Lexend Deca";
+  color: #080c1a;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+}
+
+.header-gradient {
+  border: 50px solid;
+  border-image-source: linear-gradient(
+    180deg,
+    rgba(22, 93, 255, 0.21) 64.32%,
+    rgba(22, 93, 255, 0.03) 100%
+  );
+}
+
+.slide-right {
+  animation: slide-right 20s infinite linear;
+}
+
+.slide-left {
+  animation: slide-left 20s infinite linear;
+}
+
+@keyframes slide-right {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-left {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.slide-top {
+  animation: slide-top 20s infinite linear;
+}
+
+.slide-bottom {
+  animation: slide-bottom 20s infinite linear;
+}
+
+@keyframes slide-top {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slide-bottom {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.hide-scrollbar {
+  overflow: auto; /* Allows scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.box {
+  background-image: repeating-linear-gradient(
+    270deg,
+    #f3f4f3,
+    #f3f4f3 8px,
+    transparent 8px,
+    transparent 15px,
+    #f3f4f3 15px
+  );
+  background-size: 100% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+
+body {
+  counter-reset: section;
+}
+
+.numbering::before {
+  counter-increment: section;
+  content: counter(section);
+}
